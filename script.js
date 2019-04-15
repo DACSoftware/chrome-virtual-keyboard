@@ -31,7 +31,7 @@ var hardwareAcceleration = true;
 var autoTrigger = false;
 var intelligentScroll = true;
 var autoTriggerLinks = false;
-var autoTriggerAfter = 1;
+var autoTriggerAfter = 0.8;
 var lastHovered = null;
 var lastHoveredTO = null;
 var iframeElemSent = 0;
@@ -479,7 +479,7 @@ function virtualKeyboardChromeExtension_open(posY, posX, force) {
 			}, 50);
 
 		} else if (virtualKeyboardChromeExtensionKeyboardEnabled != "false") {
-			if (virtualKeyboardChromeExtensionKeyboardLayout1Setting == undefined) { virtualKeyboardChromeExtensionKeyboardLayout1Setting = "en"; }
+			if (virtualKeyboardChromeExtensionKeyboardLayout1Setting == undefined) { virtualKeyboardChromeExtensionKeyboardLayout1Setting = "pl"; }
 			if (virtualKeyboardChromeExtensionKeyboardLoaded1 != virtualKeyboardChromeExtensionKeyboardLayout1Setting) {
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
@@ -1190,7 +1190,7 @@ function vk_ajax_load_main() {
 			}
 
 			// autoTriggerAfter
-			if (response.autoTriggerAfter == undefined) { response.autoTriggerAfter = 1; }
+			if (response.autoTriggerAfter == undefined) { response.autoTriggerAfter = 0.8; }
 			autoTriggerAfter = response.autoTriggerAfter * 1000;
 		});
 		virtualKeyboardChromeExtensionKeyboardElement.innerHTML = xhr.responseText;
