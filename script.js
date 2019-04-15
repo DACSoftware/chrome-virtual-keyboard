@@ -479,7 +479,7 @@ function virtualKeyboardChromeExtension_open(posY, posX, force) {
 			}, 50);
 
 		} else if (virtualKeyboardChromeExtensionKeyboardEnabled != "false") {
-			if (virtualKeyboardChromeExtensionKeyboardLayout1Setting == undefined) { virtualKeyboardChromeExtensionKeyboardLayout1Setting = "en"; }
+			if (virtualKeyboardChromeExtensionKeyboardLayout1Setting == undefined) { virtualKeyboardChromeExtensionKeyboardLayout1Setting = "pl"; }
 			if (virtualKeyboardChromeExtensionKeyboardLoaded1 != virtualKeyboardChromeExtensionKeyboardLayout1Setting) {
 				var xmlhttp = new XMLHttpRequest();
 				xmlhttp.onreadystatechange = function () {
