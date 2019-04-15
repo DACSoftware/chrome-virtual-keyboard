@@ -31,7 +31,7 @@ var hardwareAcceleration = true;
 var autoTrigger = false;
 var intelligentScroll = true;
 var autoTriggerLinks = false;
-var autoTriggerAfter = 1;
+var autoTriggerAfter = 0.8;
 var lastHovered = null;
 var lastHoveredTO = null;
 var iframeElemSent = 0;
@@ -1190,7 +1190,7 @@ function vk_ajax_load_main() {
 			}
 
 			// autoTriggerAfter
-			if (response.autoTriggerAfter == undefined) { response.autoTriggerAfter = 1; }
+			if (response.autoTriggerAfter == undefined) { response.autoTriggerAfter = 0.8; }
 			autoTriggerAfter = response.autoTriggerAfter * 1000;
 		});
 		virtualKeyboardChromeExtensionKeyboardElement.innerHTML = xhr.responseText;
