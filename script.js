@@ -788,11 +788,11 @@ false);
 	if (virtualKeyboardChromeExtensionTouchEvents != undefined) {
 		var nodes = getAllChildNodes(document, true)
 		for (let e of nodes) {
-			if (e.nodeName == "INPUT") {
+			if (!e.classList.contains("virtual-keyboard-disabled") && e.nodeName == "INPUT") {
 				if ((e.type == "text") || (e.type == "password") || (e.type == "search") || (e.type == "email") || (e.type == "number") || (e.type == "tel") || (e.type == "url")) {
 					virtualKeyboardChrome_bind_input(e, autoTrigger, vk_evt_input_focus, vk_evt_input_click);		
 				}
-			} else if (e.nodeName == "TEXTAREA") {
+			} else if (!e.classList.contains("virtual-keyboard-disabled") && e.nodeName == "TEXTAREA") {
 				virtualKeyboardChrome_bind_input(e, autoTrigger, vt_evt_textarea_focus, vt_evt_textarea_click);
 			}
 		}
