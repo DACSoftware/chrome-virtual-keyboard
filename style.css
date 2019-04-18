@@ -182,11 +182,11 @@
 }
 
 #virtualKeyboardChromeExtension [_key=Enter] span {
-	background-image: url(/icons/enter-e.png);
+	background-image: url(/icons/enter.png);
 }
 
 #virtualKeyboardChromeExtension [_key=Backspace] span {
-	background-image: url(/icons/backspace-e.png);
+	background-image: url(/icons/backspace.png);
 }
 
 #virtualKeyboardChromeExtension .kbdHBS span {
@@ -363,6 +363,10 @@
 	background-color: #212021 !important;
 }		
 #virtualKeyboardChromeExtensionMainKbd.Shift td.kbdShift span {
+	background-color: #DDD !important;
+	color: #333 !important;
+}
+#virtualKeyboardChromeExtensionMainKbd.Abc td.kbdAbc span {
 	background-color: #DDD !important;
 	color: #333 !important;
 }
