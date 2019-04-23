@@ -93,9 +93,24 @@ function virtualKeyboardChromeExtension_getParentByTagName(el, tagName) {
 }
 
 function virtualKeyboardChromeExtension_shiftButtonKeys() {
-	var keys = document.getElementsByClassName("keyCaseDisplay");
+	var keys = document.getElementsByClassName("kbdAlt");
 	for (var i = 0; i < keys.length; i++) {
-		keys[i].innerHTML = "<span>" + keys[i].getAttribute("_key" + (virtualKeyboardChromeExtensionShift ? "C" : "")) + "</span>";
+		if (virtualKeyboardChromeExtensionFormat) {
+			keys[i].innerHTML = "<span>" + keys[i].getAttribute("_key" + (virtualKeyboardChromeExtensionShift ? "AC" : "A")) + "</span>";
+		} else {
+			keys[i].innerHTML = "<span>" + keys[i].getAttribute("_key" + (virtualKeyboardChromeExtensionShift ? "C" : "")) + "</span>";
+		}
+	}
+}
+
+function virtualKeyboardChromeExtension_altButtonKeys() {
+	var keys = document.getElementsByClassName("kbdAlt");
+	for (var i = 0; i < keys.length; i++) {
+		if (virtualKeyboardChromeExtensionShift) {
+			keys[i].innerHTML = "<span>" + keys[i].getAttribute("_key" + (virtualKeyboardChromeExtensionFormat ? "AC" : "C")) + "</span>";
+		} else {
+			keys[i].innerHTML = "<span>" + keys[i].getAttribute("_key" + (virtualKeyboardChromeExtensionFormat ? "A" : "")) + "</span>";
+		}
 	}
 }
 
@@ -160,8 +175,12 @@ function virtualKeyboardChromeExtension_click(key, skip) {
 				break;
 			case '&123':
 				virtualKeyboardChromeExtensionFormat = !virtualKeyboardChromeExtensionFormat;
-				document.getElementById('virtualKeyboardChromeExtensionMainKbd').style.display = virtualKeyboardChromeExtensionFormat ? "none" : "";
-				document.getElementById('virtualKeyboardChromeExtensionMainNumbers').style.display = virtualKeyboardChromeExtensionFormat ? "" : "none";
+				if (virtualKeyboardChromeExtensionFormat) {
+					document.getElementById("virtualKeyboardChromeExtensionMainKbd").classList.add("Abc");
+				} else {
+					document.getElementById("virtualKeyboardChromeExtensionMainKbd").classList.remove("Abc");
+				}
+				virtualKeyboardChromeExtension_altButtonKeys();
 				break;
 			case 'Close':
 				for( let dlg of dialogs ){
@@ -254,7 +273,11 @@ function virtualKeyboardChromeExtension_click(key, skip) {
 				break;
 			case 'Shift':
 				virtualKeyboardChromeExtensionShift = !virtualKeyboardChromeExtensionShift;
-				document.getElementById("virtualKeyboardChromeExtensionMainKbd").className = virtualKeyboardChromeExtensionShift ? "Shift" : "";
+				if (virtualKeyboardChromeExtensionShift) {
+					document.getElementById("virtualKeyboardChromeExtensionMainKbd").classList.add("Shift");
+				} else {
+					document.getElementById("virtualKeyboardChromeExtensionMainKbd").classList.remove("Shift");
+				}
 				virtualKeyboardChromeExtension_shiftButtonKeys();
 				break;
 			case 'Backspace':
@@ -302,6 +325,11 @@ function virtualKeyboardChromeExtension_click(key, skip) {
 							virtualKeyboardChromeExtensionShift = !virtualKeyboardChromeExtensionShift;
 							document.getElementById("virtualKeyboardChromeExtensionMainKbd").className = virtualKeyboardChromeExtensionShift ? "Shift" : "";
 							virtualKeyboardChromeExtension_shiftButtonKeys();
+						}
+						if (virtualKeyboardChromeExtensionFormat) {
+							virtualKeyboardChromeExtensionFormat = !virtualKeyboardChromeExtensionFormat;
+							document.getElementById("virtualKeyboardChromeExtensionMainKbd").className = virtualKeyboardChromeExtensionFormat ? "Abc" : "";
+							virtualKeyboardChromeExtension_altButtonKeys();
 						}
 						virtualKeyboardChromeExtensionDraggabling = false;
 						virtualKeyboardChromeExtensionClickedElem.dispatchEvent(virtualKeyboardChromeExtension_fireEvent("keypress", 0, key.charCodeAt(0)));
@@ -684,6 +712,20 @@ function* getAllChildNodes(element, includeShadowDom) {
     }
 }
 
+function getClickedKey() {
+	var k = this.getAttribute("_key");
+	if (virtualKeyboardChromeExtensionShift) {
+		if (!virtualKeyboardChromeExtensionFormat && this.getAttribute("_keyC") != undefined) {
+			k = this.getAttribute("_keyC");
+		} else if (virtualKeyboardChromeExtensionFormat && this.getAttribute("_keyAC") != undefined) {
+			k = this.getAttribute("_keyAC");
+		}
+	} else if (virtualKeyboardChromeExtensionFormat && this.getAttribute("_keyA") != undefined) {
+		k = this.getAttribute("_keyA");
+	}
+	return k;
+}
+
 function init_virtualKeyboardChromeExtension(firstTime) {
 	if (firstTime) {
 		if (top == self) {
@@ -835,23 +877,13 @@ false);
 				if (e[i].getAttribute("_vkEnabled") == undefined) {
 					e[i].setAttribute("_vkEnabled", "true");
 					e[i].onclick = function (ent) {
-						var k = this.getAttribute("_key");
-						if (virtualKeyboardChromeExtensionShift) {
-							if (this.getAttribute("_keyC") != undefined) {
-								k = this.getAttribute("_keyC");
-							}
-						}
+						var k = getClickedKey.call(this);
 						virtualKeyboardChromeExtension_click(k);
 						virtualKeyboardChrome_prevent(ent);
 					};
 					if (virtualKeyboardChromeExtensionTouchEvents == "true") {
 						e[i].ontouchstart = function (ent) {
-							var k = this.getAttribute("_key");
-							if (virtualKeyboardChromeExtensionShift) {
-								if (this.getAttribute("_keyC") != undefined) {
-									k = this.getAttribute("_keyC");
-								}
-							}
+							var k = getClickedKey.call(this);
 							virtualKeyboardChromeExtension_click(k);
 							var e = this.getAttribute("_key");
 							if ((virtualKeyboardChromeExtensionRepeatLetters) || (e == "Backspace")) {
@@ -996,12 +1028,7 @@ false);
 												window.open(chrome.extension.getURL("options.html"));
 												break;
 											case "key":
-												var k = this.getAttribute("_key");
-												if (virtualKeyboardChromeExtensionShift) {
-													if (this.getAttribute("_keyC") != undefined) {
-														k = this.getAttribute("_keyC");
-													}
-												}
+												var k = getClickedKey.call(this);
 												virtualKeyboardChromeExtension_click(k);
 												break;
 										}
