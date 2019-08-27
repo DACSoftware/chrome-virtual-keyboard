@@ -2,6 +2,7 @@
   "name": "Virtual Keyboard",
   "description": "Fullscreen on-screen virtual keyboard for touch screen devices",
   "manifest_version": 2,
+  "author": "Shaun Tabone",
   "version": "1.12.3",
   "icons": {
     "16": "keyboard.png",
